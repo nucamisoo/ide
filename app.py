@@ -3,13 +3,7 @@ from tkinter import ttk
 import subprocess
 import time
 import csv
-
-
-#def button_clicked():
-#    print('Button clicked')
-#    subprocess.run(['vi', 'abc.txt'])
-#    time.sleep(3)
-#    print('You closed vi 3 seconds ago.')
+import pprint
 
 
 if __name__ == '__main__':
@@ -17,20 +11,33 @@ if __name__ == '__main__':
     root.title('IDE')
     #root.geometry('600x400+50+50')
     
-    #message = tk.Label(root, text="Table Area")
-    #message.pack()
-    
-    #button = ttk.Button(root, text='Click to open abc.txt in vi', command=button_clicked)
-    #button.pack()
-    
+    label_frame = ttk.Frame(root)
+    #button_frame = ttk.Frame(root)
     
     with open('demo/csv/data.csv') as f:
-        lines = csv.reader(f)
-        for row, items in enumerate(lines):
-            for column, item in enumerate(items):
-                label = ttk.Label(root, text=item)
-                label.grid(row=row, column=column)
-                
+        reader = csv.reader(f)
+        lines = [line for line in reader]
+        lines_t = [list(x) for x in zip(*lines)]  # transposed
+        
+        label_inner_frames = []
+        #button_inner_frames = []
+        for column, items in enumerate(lines_t):
+            # for labels
+            label_inner_frames.insert(column, ttk.Frame(label_frame, borderwidth=1, relief='solid'))
+            for row, item in enumerate(items):
+                ttk.Label(label_inner_frames[column], text=item).grid(row=row, column=0)
+            label_inner_frames[column].grid(row=0, column=column)
+            
+            # for buttons(not working)
+            #for column, btn in enumerate(['run', 'edit'])
+            #    button_inner_frames.insert(column, ttk.Frame(button_frame))
+            #    if '.csh' in item:
+            #        ttk.Button(button_inner_frames[column], text='run').grid(row=row, column=0)
+            #    ttk.Button(button_inner_frames[column], text='edit').grid(row=row, column=1)
+            #button_inner_frames[column].grid(row=0, column=column)
+        
+    label_frame.grid(row=0, column=0)
+    #button_frame.grid(row=0, column=1)
                    
     root.mainloop()
 
