@@ -12,32 +12,33 @@ if __name__ == '__main__':
     #root.geometry('600x400+50+50')
     
     label_frame = ttk.Frame(root)
-    #button_frame = ttk.Frame(root)
     
+    # Note: - foobar_list means 1d list
+    #     : - foobar_lists means 2d list
     with open('demo/csv/data.csv') as f:
         reader = csv.reader(f)
-        lines = [line for line in reader]
-        lines_t = [list(x) for x in zip(*lines)]  # transposed
+        row_lists = [row for row in reader]
+        column_lists = [list(x) for x in zip(*row_lists)]  # transposed
+        
+        column_dict = {}
+        header_list = row_lists[0]
+        print(header_list)
+        for c_index, c_name in enumerate(header_list):
+            column_dict[c_name] = column_lists[c_index][1:]
+        pprint.pprint(column_dict)
         
         label_inner_frames = []
-        #button_inner_frames = []
-        for column, items in enumerate(lines_t):
-            # for labels
-            label_inner_frames.insert(column, ttk.Frame(label_frame, borderwidth=1, relief='solid'))
-            for row, item in enumerate(items):
-                ttk.Label(label_inner_frames[column], text=item).grid(row=row, column=0)
-            label_inner_frames[column].grid(row=0, column=column)
+        for c_index, c_name in enumerate(header_list):
+            label_inner_frames.insert(c_index, ttk.Frame(label_frame, borderwidth=1, relief='solid'))
             
-            # for buttons(not working)
-            #for column, btn in enumerate(['run', 'edit'])
-            #    button_inner_frames.insert(column, ttk.Frame(button_frame))
-            #    if '.csh' in item:
-            #        ttk.Button(button_inner_frames[column], text='run').grid(row=row, column=0)
-            #    ttk.Button(button_inner_frames[column], text='edit').grid(row=row, column=1)
-            #button_inner_frames[column].grid(row=0, column=column)
+            # for the table header
+            ttk.Label(label_inner_frames[c_index], text=c_name).grid(row=0, column=0)
+            # for the table contents
+            for r_index, item in enumerate(column_dict[c_name]):
+                ttk.Label(label_inner_frames[c_index], text=item).grid(row=r_index+1, column=0)
+            label_inner_frames[c_index].grid(row=0, column=c_index)
         
     label_frame.grid(row=0, column=0)
-    #button_frame.grid(row=0, column=1)
                    
     root.mainloop()
 
