@@ -5,6 +5,7 @@ import time
 import csv
 import pprint
 
+
 def make_label_dictlist_lists(label_column_lists):
     label_dictlist_lists = []
     for column_list in label_column_lists:
@@ -14,12 +15,6 @@ def make_label_dictlist_lists(label_column_lists):
         label_dictlist_lists.append(label_dictlist)
     return label_dictlist_lists
 
-def make_label_dictlist(label_column_lists):
-    label_dictlist = []
-    for column_list in label_column_lists:
-        for text in column_list:
-            label_dictlist.append({'widget_type': 'Label', 'text': text, 'context': 'label_frame'})
-    return label_dictlist
 
 def make_button_run_dictlist(filename_list):
     button_run_dictlist = []
@@ -39,9 +34,6 @@ def make_button_edit_dictlist(filename_list):
     button_edit_dictlist.insert(0, {'widget_type': 'Label', 'text': 'edit', 'context': 'button_frame'})  # for header
     return button_edit_dictlist
 
-
-def c_indexer(h_list, txt, c_idx):
-    return (h_list.index(txt), True) if txt in h_list else (c_idx, False)
 
 def create_table(container, sheet_dictlist_lists):
     sheet_frame = ttk.Frame(container)
@@ -64,8 +56,8 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.title('IDE')
     
-    #in_file = 'demo/csv/data.csv'
-    in_file = 'csvprepro/sample.csv'
+    in_file = 'demo/csv/data.csv'
+    #in_file = 'csvprepro/sample.csv'
     
     with open(in_file) as f:
         reader = csv.reader(f)
@@ -79,8 +71,8 @@ if __name__ == '__main__':
         label_dictlist_lists = make_label_dictlist_lists(label_column_lists)
         
         # for buttons
-        #filename_list = label_column_lists[label_header_list.index('filename')][1:]  # for data.csv
-        filename_list = label_column_lists[0][1:]  # for sample.csv
+        filename_list = label_column_lists[label_header_list.index('filename')][1:]  # for data.csv
+        #filename_list = label_column_lists[0][1:]  # for sample.csv
         button_run_dictlist = make_button_run_dictlist(filename_list)
         button_edit_dictlist = make_button_edit_dictlist(filename_list)
         button_dictlist_lists = [button_run_dictlist] + [button_edit_dictlist]
